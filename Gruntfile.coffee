@@ -4,6 +4,7 @@ module.exports = (grunt) ->
   grunt.loadNpmTasks('grunt-contrib')
   grunt.loadNpmTasks('grunt-contrib-coffee')
   grunt.loadNpmTasks('grunt-contrib-concat')
+  grunt.loadNpmTasks('grunt-espower')
 
   grunt.initConfig
     pkg: grunt.file.readJSON('package.json')
@@ -35,14 +36,41 @@ module.exports = (grunt) ->
     concat:
       options:
         separator: ';'
-      dist:
+      test:
         src: ['js/**/*.js'],
         dest: './test/bundle.js'
 
+    espower:
+      options :{
+        patterns: [
+            'assert(value, [message])',
+            'assert.ok(value, [message])',
+            'assert.equal(actual, expected, [message])',
+            'assert.notEqual(actual, expected, [message])',
+            'assert.strictEqual(actual, expected, [message])',
+            'assert.notStrictEqual(actual, expected, [message])',
+            'assert.deepEqual(actual, expected, [message])',
+            'assert.notDeepEqual(actual, expected, [message])'
+        ]
+      },
+      test:
+        files: [
+          {
+            expand: true,        # Enable dynamic expansion.
+            cwd: 'test/',        # Src matches are relative to this path.
+            src: ['tests.js'],    # Actual pattern(s) to match.
+            dest: 'test',  # Destination path prefix.
+            ext: '.js'           # Dest filepaths will have this extension.
+          }
+        ]
+
     watch:
-      run:
-        files: ["ts/**/*.ts", "test/**/*_test.coffee"]
-        tasks: ["make"]
+      ts:
+        files: ["ts/**/*.ts"]
+        tasks: ["typescript:ts", "concat:test"]
+      test:
+        files: ["test/**/*_test.coffee"]
+        tasks: ["coffee:test", "espower:test"]
 
     connect:
       server:
@@ -51,6 +79,6 @@ module.exports = (grunt) ->
           port: 8888
           base: './'
 
-  grunt.registerTask("run", ["connect", "make", "watch:run"])
-  grunt.registerTask("make", ["typescript:ts", "coffee:test", "concat"])
+  grunt.registerTask("run", ["connect", "make", "watch"])
+  grunt.registerTask("make", ["typescript:ts", "coffee:test", "concat:test", "espower:test"])
   grunt.registerTask("default", ["make"])

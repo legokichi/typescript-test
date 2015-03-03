@@ -3,5 +3,5 @@
 
 
 function hoge (x:number):number {
-  return x;
+  return x+x;
 }
