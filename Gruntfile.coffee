@@ -31,14 +31,14 @@ module.exports = (grunt) ->
     coffee:
       test:
         files:
-          './test/tests.js': ['./test/*_test.coffee']
+          './tests/tests.js': ['./tests/*_test.coffee']
 
     concat:
       options:
         separator: ';'
       test:
         src: ['js/**/*.js'],
-        dest: './test/bundle.js'
+        dest: './tests/sandbox/bundle.js'
 
     espower:
       options :{
@@ -57,9 +57,9 @@ module.exports = (grunt) ->
         files: [
           {
             expand: true,        # Enable dynamic expansion.
-            cwd: 'test/',        # Src matches are relative to this path.
+            cwd: 'tests',        # Src matches are relative to this path.
             src: ['tests.js'],    # Actual pattern(s) to match.
-            dest: 'test',  # Destination path prefix.
+            dest: 'tests/sandbox',  # Destination path prefix.
             ext: '.js'           # Dest filepaths will have this extension.
           }
         ]
@@ -69,7 +69,7 @@ module.exports = (grunt) ->
         files: ["ts/**/*.ts"]
         tasks: ["typescript:ts", "concat:test"]
       test:
-        files: ["test/**/*_test.coffee"]
+        files: ["tests/**/*_test.coffee"]
         tasks: ["coffee:test", "espower:test"]
 
     connect:
