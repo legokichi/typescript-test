@@ -31,7 +31,7 @@ module.exports = (grunt) ->
     coffee:
       test:
         files:
-          './tests/tests.js': ['./tests/*_test.coffee']
+          './tests/sandbox/tests.js': ['./tests/*_test.coffee']
 
     concat:
       options:
@@ -57,7 +57,7 @@ module.exports = (grunt) ->
         files: [
           {
             expand: true,        # Enable dynamic expansion.
-            cwd: 'tests',        # Src matches are relative to this path.
+            cwd: 'tests/sandbox',        # Src matches are relative to this path.
             src: ['tests.js'],    # Actual pattern(s) to match.
             dest: 'tests/sandbox',  # Destination path prefix.
             ext: '.js'           # Dest filepaths will have this extension.
